@@ -7,6 +7,7 @@
  *     TreeNode(int x) { val = x; }
  * }
  */
+
 class Solution {
     public List<Integer> inorderTraversal(TreeNode root) {
         List<Integer> list = new ArrayList<Integer>();
@@ -27,3 +28,4 @@ class Solution {
         return list;
     }
 }
+
