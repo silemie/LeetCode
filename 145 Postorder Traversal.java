@@ -16,19 +16,37 @@ class Solution {
         
         TreeNode node = root;
         
-        while(node != null || !stack.empty()) {
-            if(node != null) {
+        while(!stack.empty() || node != null) {
+            
+            while(node != null) {
+                if(node.right != null) {
+                    stack.push(node.right);
+                }
                 stack.push(node);
-                postorder.add(node.val);
-                node = node.right;
+                node = node.left;
+            }
+            
+            TreeNode visitedNode = stack.pop();  
+            
+            TreeNode right;
+            if(stack.size() != 0) {
+                right = stack.peek();
             } else {
-                TreeNode tmp = stack.pop();
-                node = tmp.left;
-            }  
+                right = null;
+            }
+            
+            if(visitedNode.right != null && visitedNode.right == right) {
+                node = stack.pop();
+                stack.push(visitedNode);
+            } else {
+                postorder.add(visitedNode.val);
+                System.out.println(stack.size());
+                node = null;
+            }
+            
         }
         
-        Collections.reverse(postorder);
-        
         return postorder;
+        
     }
 }
