@@ -1,9 +1,36 @@
-public class Solution {
-    /**
-     * @param nums: an array of integers
-     * @param s: An integer
-     * @return: an integer representing the minimum size of subarray
-     */
+
+/*真正的双指针*/
+
+
+class Solution {
+    public int minSubArrayLen(int s, int[] nums) {
+       int l = 0;
+        int min = Integer.MAX_VALUE;
+        int sum = 0;
+        int cur = nums.length + 1;
+        
+        for(int r = 0; r < nums.length; r++) {
+            sum += nums[r];
+            while(sum >= s) {
+                cur = r - l + 1;
+                sum -= nums[l];
+                l++;
+            }
+            
+            if(cur < min) {
+                min = cur;
+            }
+            
+        }
+        
+        if(cur == nums.length + 1) {min = 0;}
+        
+        return min;
+    }
+}
+
+/*public class Solution {
+
     public int minimumSize(int[] nums, int s) {
         // write your code here
         
@@ -31,4 +58,4 @@ public class Solution {
     
         return min;
     }
-}
+}*/
