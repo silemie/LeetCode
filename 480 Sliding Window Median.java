@@ -1,16 +1,63 @@
 public class Solution {
-    /*
-     * @param nums: A list of integers
-     * @param k: An integer
-     * @return: The median of the element inside the window at each moving
-     */
+
     PriorityQueue<Integer> maxHeap, minHeap;
-    public double[] medianSlidingWindow(int[] A, int k) {
+    public List<Integer> medianSlidingWindow(int[] nums, int k) {
         // write your code here
-        List<Double> res = new ArrayList<Double>();
+        List<Integer> ans = new ArrayList<Integer>();
+        if(nums.length == 0 || k == 0) {return ans;}
+        
+        maxHeap = new PriorityQueue<>(Collections.reverseOrder());
+        minHeap = new PriorityQueue<>();
+        
+        int index = 0;
+
+        for(int i = 0; i < nums.length; i++) {
+            if(minHeap.size() + maxHeap.size() < k) {
+                if(maxHeap.size() == 0 || nums[i] <= maxHeap.peek()) {
+                    maxHeap.offer(nums[i]);
+                } else {
+                    minHeap.offer(nums[i]);
+                }
+                
+                balance();
+            }
+            
+            if(minHeap.size() + maxHeap.size() == k) {
+                int med = maxHeap.peek();
+                ans.add(med);
+                if(nums[index] <= med) {
+                    maxHeap.remove(nums[index]);
+                } else {
+                    minHeap.remove(nums[index]);
+                }
+                index++;
+                balance();
+            }
+        }
+        
+        return ans;
+    }
+    
+    private void balance() {
+        if(minHeap.size() < maxHeap.size() - 1) {
+            minHeap.offer(maxHeap.poll());
+        }
+        
+        if(maxHeap.size() < minHeap.size()) {
+            maxHeap.offer(minHeap.poll());
+        }
+    }
+}
+/*
+public class Solution {
+
+    PriorityQueue<Integer> maxHeap, minHeap;
+    public List<Integer> medianSlidingWindow(int[] A, int k) {
+        // write your code here
+        List<Integer> res = new ArrayList<Integer>();
         int n = A.length;
         if (n == 0) {
-            return new double[0];
+            return res;
         }
         
         maxHeap = new PriorityQueue<Integer>(n, Collections.reverseOrder());
@@ -38,21 +85,11 @@ public class Solution {
             balance();
             
             if (i >= k - 1) {
-                if(k % 2 == 0) {
-                    
-                    res.add(((double)minHeap.peek() + (double)maxHeap.peek()) / 2.0);
-                } else {                
-                    res.add((double)maxHeap.peek());
-                }
+                res.add(maxHeap.peek());
             }
         }
         
-        double[] ans = new double[res.size()];
-        for(i = 0; i < res.size(); i++) {
-            ans[i] = res.get(i);
-        }
-        
-        return ans;
+        return res;
     }
     
     private void balance() {
@@ -64,4 +101,4 @@ public class Solution {
             minHeap.offer(maxHeap.poll());
         }
     }
-}
+}*/
