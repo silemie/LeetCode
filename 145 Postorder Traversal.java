@@ -10,42 +10,31 @@
 class Solution {
     public List<Integer> postorderTraversal(TreeNode root) {
         List<Integer> postorder = new ArrayList<Integer>();
-        if(root == null) {return postorder;}
+        if(root == null) {
+            return postorder;
+        }
         
         Stack<TreeNode> stack = new Stack<>();
-        
         TreeNode node = root;
         
-        while(!stack.empty() || node != null) {
-            
+        while(node != null || !stack.isEmpty()) {
             while(node != null) {
                 if(node.right != null) {
                     stack.push(node.right);
                 }
+                
                 stack.push(node);
                 node = node.left;
             }
             
-            TreeNode visitedNode = stack.pop();  
-            
-            TreeNode right;
-            if(stack.size() != 0) {
-                right = stack.peek();
-            } else {
-                right = null;
-            }
-            
-            if(visitedNode.right != null && visitedNode.right == right) {
+            TreeNode cur = stack.pop();
+            if(cur.right != null && !stack.isEmpty() && cur.right == stack.peek()) {
                 node = stack.pop();
-                stack.push(visitedNode);
+                stack.push(cur);
             } else {
-                postorder.add(visitedNode.val);
-                System.out.println(stack.size());
-                node = null;
+                postorder.add(cur.val);
             }
-            
         }
-        
         return postorder;
         
     }
