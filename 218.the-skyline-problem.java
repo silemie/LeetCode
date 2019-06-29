@@ -70,7 +70,11 @@ class Point {
     public static Comparator<Point> PointComparator = new Comparator<Point>() {
         public int compare(Point a, Point b) {
             if(a.x == b.x) {
-                return  b.h - a.h;
+                if(a.left == 1) {
+                    return a.h - b.h;
+                } else {
+                    return b.h - a.h;
+                }
             }
             return a.x - b.x;
         }
@@ -99,46 +103,52 @@ class Solution {
         }
 
         Collections.sort(points, Point.PointComparator);
+        /*for(int i = 0; i < points.size(); i++) {
+            System.out.println("("+points.get(i).x+ ","+points.get(i).h+","+points.get(i).left+")");
+        }*/
 
         PriorityQueue<Integer> maxHeap = new PriorityQueue<Integer>(buildings.length * 2, Collections.reverseOrder());
         maxHeap.offer(0);
         int prev = 0;
-        Point prevp = new Point(0, 0, 0);
+        int prevx = 0;
+        //Point prevp = new Point(0, 0, 0);
 
         for(Point p : points) {
 
             ArrayList<Integer> record = new ArrayList<>();
             if(p.left == 1) {
-
-                //System.out.println(prevp.x);
-                if(ans.size() != 0 && p.x == prevp.x && p.h >= prevp.h) {
-                    ans.remove(ans.size() - 1);
-                }
-
-                if(p.h > maxHeap.peek() && p.h != prev) {
-                    record.add(p.x);
-                    record.add(p.h);
-                    //System.out.println(p.x);
-                    //System.out.println(p.h);
-                    ans.add(record);
-                }
-                /*if(p.h == prev) {
-                    ans.remove(ans.size() - 1 );
-                } else if (p.h > prevh && p.x == prevx) {
-                    ans.remove(ans.size() - 1);
-                }*/
                 maxHeap.offer(p.h);
             } else {
-                prev = maxHeap.peek();
-                prevp = p;
                 maxHeap.remove(p.h);
-                if(p.h > maxHeap.peek()) {
-                    record.add(p.x);
-                    record.add(maxHeap.peek());
-                    ans.add(record);
-                    //System.out.println(p.x);
-                }
             }
+
+            int cur = maxHeap.peek();
+            if(cur != prev) {
+                record.add(p.x);
+                record.add(cur);
+                prev = cur;
+                ans.add(record);
+            }
+
+            /*if(p.h > maxHeap.peek()) {
+                record.add(p.x);
+                record.add(maxHeap.peek());
+                ans.add(record);
+                //System.out.println(p.x);
+            }
+
+            if(p.h > maxHeap.peek() && p.h != prev) {
+                record.add(p.x);
+                record.add(p.h);
+                //System.out.println(p.x);
+                //System.out.println(p.h);
+                ans.add(record);
+            }
+            /*if(p.h == prev) {
+                ans.remove(ans.size() - 1 );
+            } else if (p.h > prevh && p.x == prevx) {
+                ans.remove(ans.size() - 1);
+            }*/
         }
 
         return ans;
