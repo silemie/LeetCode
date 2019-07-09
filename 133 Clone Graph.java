@@ -1,62 +1,61 @@
-/**
- * Definition for undirected graph.
- * class UndirectedGraphNode {
- *     int label;
- *     ArrayList<UndirectedGraphNode> neighbors;
- *     UndirectedGraphNode(int x) { label = x; neighbors = new ArrayList<UndirectedGraphNode>(); }
- * };
- */
+/*
+// Definition for a Node.
+class Node {
+    public int val;
+    public List<Node> neighbors;
 
+    public Node() {}
 
-public class Solution {
-    /*
-     * @param node: A undirected graph node
-     * @return: A undirected graph node
-     */
-    public UndirectedGraphNode cloneGraph(UndirectedGraphNode node) {
+    public Node(int _val,List<Node> _neighbors) {
+        val = _val;
+        neighbors = _neighbors;
+    }
+};
+*/
+class Solution {
+    public Node cloneGraph(Node node) {
         if(node == null) {
             return null;
         }
         
-        int key = node.label;
-        UndirectedGraphNode copy = new UndirectedGraphNode(key);
+        int key = node.val;
+        Node copy = new Node(key, new ArrayList<Node>());
         
-        Map<Integer, UndirectedGraphNode> hash = new HashMap<>();
-        Queue<UndirectedGraphNode> q = new LinkedList<>();
-        q.offer(node);
+        Map<Integer, Node> hash = new HashMap<>();
         hash.put(key, copy);
         
+        Queue<Node> q = new LinkedList<>();
+        q.offer(node);
+        
         while(q.size() != 0) {
-            UndirectedGraphNode cur = q.poll();
-            UndirectedGraphNode newNode;
-            if(hash.containsKey(cur.label)) {
-                newNode = hash.get(cur.label);
+            Node curNode = q.poll();
+            Node newNode;
+            if(hash.containsKey(curNode.val)) {
+                newNode = hash.get(curNode.val);
+                //System.out.println("New Node val: " + newNode.val);
             } else {
-                newNode = new UndirectedGraphNode(cur.label);
+                newNode = new Node(curNode.val, new ArrayList<Node>());
             }
             
-            if(cur.neighbors.size() != 0) {
-                for(UndirectedGraphNode neighbor : cur.neighbors) {
-                    UndirectedGraphNode n;
-                    if(hash.containsKey(neighbor.label)) {
-                        n = hash.get(neighbor.label);
+            if(curNode.neighbors.size() != 0) {
+                for(Node neighbor : curNode.neighbors) {
+                    Node n;
+                    if(hash.containsKey(neighbor.val)) {
+                        n = hash.get(neighbor.val);
                     } else {
                         q.offer(neighbor);
-                        n = new UndirectedGraphNode(neighbor.label);
+                        n = new Node(neighbor.val, new ArrayList<Node>());
                     }
-                    newNode.neighbors.add(n);
-                    hash.put(neighbor.label, n);
                     
-                    //System.out.println("Cur:"+cur.label+" Neighbor:"+neighbor.label);
-                    // if(!hash.containsKey(neighbor.label)){
-                    //     q.offer(neighbor);
-                    //}
-                } 
+                    newNode.neighbors.add(n);
+                    hash.put(neighbor.val, n);
+                }
             }
             
-            hash.put(cur.label, newNode);
+            hash.put(curNode.val, newNode);
         }
         
+        //System.out.println(hash.get(key).val);
         return hash.get(key);
     }
 }
