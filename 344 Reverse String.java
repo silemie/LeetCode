@@ -13,3 +13,23 @@ class Solution {
         }
     }
 }
+
+/**
+ * recursive way
+ */
+
+class Solution {
+    public void reverseString(char[] s) {
+        printHelper(0, s);
+    }
+    
+    private void printHelper(int index, char[] s) {
+        if(s.length == 0 || index >= s.length) {
+            return;
+        }
+        
+        char tmp = s[index];
+        printHelper(index + 1, s);
+        s[s.length - index - 1] = tmp;
+    }
+}
