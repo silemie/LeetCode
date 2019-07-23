@@ -60,3 +60,26 @@ class Solution {
         return depth;
     }
 }
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public int maxDepth(TreeNode root) {
+        return maxHelper(root, 0);
+    }
+    
+    private int maxHelper(TreeNode root, int depth) {
+        if(root == null) {
+            return depth;
+        }
+        
+        return Math.max(maxHelper(root.left, depth + 1), maxHelper(root.right, depth + 1));
+    }
+}
