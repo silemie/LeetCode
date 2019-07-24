@@ -8,43 +8,32 @@
  * }
  */
 
- /**
-  * Problem: too much memory
-  */
+/**
+ * First time solution 
+ * slow
+ */
 class Solution {
     public int minDepth(TreeNode root) {
-        
-        if(root == null) {return 0;}
-        
-        Queue<TreeNode> q = new LinkedList<>();
-        
-        q.add(root);
-        
-        int depth = 0;
-        while(q.size() != 0) {
-            int size = q.size();
-            depth += 1;
-            
-            for(int i = 0; i < size; i++) {
-                TreeNode node = q.poll();
-                
-                if(node.left == null && node.right == null) {
-                    return depth;
-                }
-                
-                if(node.left != null) {
-                   q.add(node.left); 
-                }    
-                
-                if(node.right != null) {
-                    q.add(node.right);
-                }
-                
-                
-            }
-            
+        if(root == null) {
+            return 0;
         }
         
-        return depth;
+        return findMinDep(root);
+    }
+    
+    private int findMinDep(TreeNode node) {
+        if(node == null) {
+            return 0;
+        }
+        
+        if(node.left == null) {
+            return findMinDep(node.right) + 1;
+        }
+        
+        if(node.right == null) {
+            return findMinDep(node.left) + 1;
+        }
+        
+        return Math.min(findMinDep(node.left), findMinDep(node.right)) + 1;
     }
 }
