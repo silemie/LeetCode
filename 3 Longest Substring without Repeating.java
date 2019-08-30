@@ -65,3 +65,37 @@ public class Solution {
         return maxLength;
     }
 }
+
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        
+        if(s == null) {
+            return 0;
+        }
+        
+        char[] words = s.toCharArray();
+        int[] used = new int[256];
+        
+        int left = 0;
+        int curLen = 0;
+        int maxLen = 0;
+        
+        for(int i = 0; i < words.length; i++) {
+            char c = words[i];
+            used[c]++;
+            curLen++;
+            
+            while(used[c] > 1 && left < words.length) {
+                curLen--;
+                used[words[left]]--;
+                //System.out.println("curlen:" + curLen + "left:" + words[left]);
+                left++;
+            }
+            
+            maxLen = Math.max(curLen, maxLen);
+        }
+        
+        return maxLen;
+        
+    }
+}
